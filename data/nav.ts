@@ -15,4 +15,8 @@ export const navItems: NavItem[] = [
       { label: "Della", href: "/characters/della" },
     ],
   },
+  {
+    label: "Dice Roller",
+    href: "/dice",
+  },
 ];
