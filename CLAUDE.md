@@ -73,3 +73,12 @@ Runs ESLint with Next.js TypeScript rules.
 - navigation bar is sticking to the screen following the scrolling but taking real space at the top
 - navigation bar is responsive as a floating (right side) hamburger menu on mobile
 - naivagtion items should be coming from data/nav.ts
+
+### DnD character info pages
+
+- reusable pages component capable of introducing characters
+- these pages purpose is to introduce the character background and text based lore with illustrations much like a hero page
+- should have fantasy colors and theme (parchment effect too)
+- some scrolling animations for images and certain blocks
+- implemented with dark and light mode in mind
+- first example character's image is in the public/characters/della.png (character name is Della, she is fairy female warlock)

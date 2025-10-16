@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --font-sans: var(--font-cormorant);
+  --font-serif: var(--font-cinzel);
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +25,246 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Character Info Styles */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out;
+}
+
+.dnd-card {
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  clip-path: polygon(
+    1% 2%, 0% 5%, 2% 8%, 1% 12%, 0% 15%, 1% 18%, 0% 22%, 2% 25%, 1% 30%, 0% 35%,
+    1% 38%, 0% 42%, 2% 45%, 1% 50%, 0% 55%, 1% 58%, 0% 62%, 2% 65%, 1% 70%, 0% 75%,
+    1% 78%, 0% 82%, 2% 85%, 1% 88%, 0% 92%, 1% 95%, 0% 98%, 2% 99%, 5% 100%, 8% 99%,
+    12% 100%, 15% 99%, 18% 100%, 22% 99%, 25% 100%, 30% 99%, 35% 100%, 38% 99%, 42% 100%,
+    45% 99%, 50% 100%, 55% 99%, 58% 100%, 62% 99%, 65% 100%, 70% 99%, 75% 100%, 78% 99%,
+    82% 100%, 85% 99%, 88% 100%, 92% 99%, 95% 100%, 98% 99%, 99% 98%, 100% 95%, 99% 92%,
+    100% 88%, 99% 85%, 100% 82%, 98% 78%, 100% 75%, 99% 70%, 100% 65%, 99% 62%, 100% 58%,
+    98% 55%, 100% 50%, 99% 45%, 100% 42%, 99% 38%, 100% 35%, 98% 30%, 100% 25%, 99% 22%,
+    100% 18%, 99% 15%, 100% 12%, 98% 8%, 100% 5%, 99% 2%, 98% 1%, 95% 0%, 92% 1%,
+    88% 0%, 85% 1%, 82% 0%, 78% 2%, 75% 0%, 70% 1%, 65% 0%, 62% 1%, 58% 0%, 55% 2%,
+    50% 0%, 45% 1%, 42% 0%, 38% 1%, 35% 0%, 30% 2%, 25% 0%, 22% 1%, 18% 0%, 15% 1%,
+    12% 0%, 8% 2%, 5% 0%, 2% 1%
+  );
+}
+
+.dnd-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/textures/parchment.png");
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+}
+
+.dnd-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(254, 252, 234, 0.85) 0%,
+    rgba(251, 243, 219, 0.82) 100%
+  );
+  z-index: -1;
+}
+
+.dark .dnd-card::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(30, 27, 38, 0.95) 0%,
+    rgba(42, 35, 52, 0.97) 100%
+  );
+  border: 2px solid rgba(168, 85, 247, 0.3);
+}
+
+.dark .dnd-card {
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(168, 85, 247, 0.15),
+    inset 0 1px 0 rgba(168, 85, 247, 0.1);
+}
+
+.column-text {
+  text-align: justify;
+  hyphens: auto;
+}
+
+@media (min-width: 768px) {
+  .column-text {
+    column-count: 1;
+  }
+}
+
+/* Background Animations */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(50px) translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.stars-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 70%, white, transparent),
+    radial-gradient(2px 2px at 79% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 90%, white, transparent),
+    radial-gradient(2px 2px at 45% 20%, white, transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: twinkle 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.twinkling-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+      1px 1px at 40% 60%,
+      rgba(251, 191, 36, 0.8),
+      transparent
+    ),
+    radial-gradient(
+      1px 1px at 20% 80%,
+      rgba(168, 85, 247, 0.6),
+      transparent
+    ),
+    radial-gradient(
+      2px 2px at 70% 30%,
+      rgba(251, 191, 36, 0.7),
+      transparent
+    ),
+    radial-gradient(
+      1px 1px at 85% 75%,
+      rgba(168, 85, 247, 0.5),
+      transparent
+    );
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  animation: twinkle 6s ease-in-out infinite reverse;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.clouds-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+      ellipse 100px 40px at 10% 20%,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 80px 30px at 15% 22%,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 120px 50px at 60% 40%,
+      rgba(255, 255, 255, 0.7),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 90px 35px at 65% 42%,
+      rgba(255, 255, 255, 0.5),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 110px 45px at 85% 60%,
+      rgba(255, 255, 255, 0.75),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 70px 30px at 30% 70%,
+      rgba(255, 255, 255, 0.65),
+      transparent
+    );
+  background-repeat: repeat-x;
+  background-size: 800px 400px;
+  animation: float 30s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sun-rays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+      circle at 80% 15%,
+      rgba(255, 223, 0, 0.15),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(255, 255, 255, 0.3),
+      transparent 30%
+    );
+  animation: pulse 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
 }
