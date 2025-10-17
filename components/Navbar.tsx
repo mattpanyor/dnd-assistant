@@ -2,15 +2,28 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { navItems, type NavItem } from "@/data/nav";
+import { type NavItem } from "@/data/nav";
 
-export default function Navbar() {
+interface NavbarProps {
+  navItems: NavItem[];
+}
+
+export default function Navbar({ navItems }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true); // Default to dark
+  const [showStickyNav, setShowStickyNav] = useState(false);
 
   useEffect(() => {
     // Check initial theme
     setIsDark(document.documentElement.classList.contains("dark"));
+
+    // Handle scroll to show/hide sticky navbar
+    const handleScroll = () => {
+      setShowStickyNav(window.scrollY > 64); // Show after scrolling past navbar height
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleTheme = () => {
@@ -26,7 +39,53 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+    <>
+      {/* Static navbar - takes up space */}
+      <NavbarContent
+        navItems={navItems}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+        isDark={isDark}
+        toggleTheme={toggleTheme}
+        isSticky={false}
+        showMobileMenu={!showStickyNav}
+      />
+
+      {/* Sticky clone - appears on scroll (desktop only on mobile) */}
+      <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${showStickyNav ? 'translate-y-0' : '-translate-y-full'}`}>
+        <NavbarContent
+          navItems={navItems}
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
+          isDark={isDark}
+          toggleTheme={toggleTheme}
+          isSticky={true}
+          showMobileMenu={showStickyNav}
+        />
+      </div>
+    </>
+  );
+}
+
+function NavbarContent({
+  navItems,
+  mobileMenuOpen,
+  setMobileMenuOpen,
+  isDark,
+  toggleTheme,
+  isSticky,
+  showMobileMenu
+}: {
+  navItems: NavItem[];
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: (open: boolean) => void;
+  isDark: boolean;
+  toggleTheme: () => void;
+  isSticky: boolean;
+  showMobileMenu: boolean;
+}) {
+  return (
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Icon - Left Side */}
@@ -116,10 +175,19 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && showMobileMenu && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 z-40 top-16"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close menu"
+        />
+      )}
+
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed right-0 top-16 w-64 bg-white dark:bg-gray-900 border-l border-b border-gray-200 dark:border-gray-800 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto">
-          <div className="px-4 py-2 space-y-1">
+      {mobileMenuOpen && showMobileMenu && (
+        <div className="md:hidden fixed right-0 top-16 w-64 bg-white dark:bg-gray-900 border-l border-b border-gray-200 dark:border-gray-800 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto z-50">
+          <div className="px-4 py-2 space-y-2">
             {navItems.map((item) => (
               <NavItemMobile
                 key={item.label}
@@ -144,7 +212,7 @@ function NavItemDesktop({ item }: { item: NavItem }) {
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
       >
-        <button className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md font-medium transition-colors">
+        <button className="px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md hover:shadow-lg border border-amber-300 dark:border-purple-600">
           {item.label}
           <svg
             className="inline-block ml-1 w-4 h-4"
@@ -163,13 +231,13 @@ function NavItemDesktop({ item }: { item: NavItem }) {
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute left-0 mt-1 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-md shadow-lg">
+          <div className="absolute left-0 mt-1 w-56 bg-amber-50 dark:bg-purple-950 border-2 border-amber-300 dark:border-purple-600 rounded-lg shadow-xl">
             <div className="py-1">
               {item.items.map((subItem) => (
                 <Link
                   key={subItem.label}
                   href={subItem.href || "#"}
-                  className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="block px-4 py-2 text-amber-900 dark:text-purple-200 hover:bg-amber-200 dark:hover:bg-purple-800 transition-colors font-serif rounded-md mx-1 my-0.5"
                 >
                   {subItem.label}
                 </Link>
@@ -184,7 +252,7 @@ function NavItemDesktop({ item }: { item: NavItem }) {
   return (
     <Link
       href={item.href || "#"}
-      className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md font-medium transition-colors"
+      className="px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md hover:shadow-lg border border-amber-300 dark:border-purple-600"
     >
       {item.label}
     </Link>
@@ -205,7 +273,7 @@ function NavItemMobile({
       <div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md font-medium transition-colors flex justify-between items-center"
+          className="w-full text-left px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md border border-amber-300 dark:border-purple-600 flex justify-between items-center"
         >
           {item.label}
           <svg
@@ -232,7 +300,7 @@ function NavItemMobile({
                 key={subItem.label}
                 href={subItem.href || "#"}
                 onClick={onNavigate}
-                className="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+                className="block px-4 py-2 text-sm bg-amber-50 dark:bg-purple-900 text-amber-900 dark:text-purple-200 hover:bg-amber-200 dark:hover:bg-purple-800 rounded-md transition-colors font-serif border border-amber-200 dark:border-purple-700"
               >
                 {subItem.label}
               </Link>
@@ -247,7 +315,7 @@ function NavItemMobile({
     <Link
       href={item.href || "#"}
       onClick={onNavigate}
-      className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md font-medium transition-colors"
+      className="block px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md border border-amber-300 dark:border-purple-600"
     >
       {item.label}
     </Link>

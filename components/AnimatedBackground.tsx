@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export default function AnimatedBackground() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true); // Default to dark
 
   useEffect(() => {
     // Set initial theme

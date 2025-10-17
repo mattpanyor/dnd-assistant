@@ -268,3 +268,57 @@ body {
   pointer-events: none;
   z-index: 0;
 }
+
+/* MDX Content Styles */
+.mdx-content > * + * {
+  margin-top: 1rem;
+}
+
+.mdx-content h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.mdx-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.mdx-content p {
+  line-height: 1.75;
+}
+
+.mdx-content ul {
+  list-style: none;
+}
+
+.mdx-content li {
+  position: relative;
+}
+
+/* Dice Background Animation */
+@keyframes diceFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(3deg);
+  }
+}
+
+.dice-float {
+  position: absolute;
+  animation: diceFloat 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}

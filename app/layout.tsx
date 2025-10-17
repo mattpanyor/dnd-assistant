@@ -3,7 +3,7 @@ import { Cinzel, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import ThemeProvider from "./theme-provider";
-import AnimatedBackground from "@/components/AnimatedBackground";
+import { getNavItems } from "@/lib/nav";
 
 const cinzel = Cinzel({
   variable: "--font-cinzel",
@@ -30,31 +30,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navItems = getNavItems();
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const savedTheme = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                  document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                }
-              } catch (e) {}
-            `,
-          }}
-        />
-      </head>
       <body
         className={`${cinzel.variable} ${cormorant.variable} antialiased`}
       >
         <ThemeProvider>
-          <AnimatedBackground />
-          <Navbar />
+          <Navbar navItems={navItems} />
           {children}
         </ThemeProvider>
       </body>

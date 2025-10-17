@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type DiceType = 'd4' | 'd6' | 'd8' | 'd10' | 'd12' | 'd20' | 'd100';
 
@@ -30,6 +30,8 @@ interface RollHistory {
   rolls: { type: DiceType; value: number }[];
 }
 
+const HISTORY_STORAGE_KEY = 'dnd-dice-history';
+
 export default function DiceRoller() {
   const [quantities, setQuantities] = useState<DiceQuantities>({
     d4: 0,
@@ -45,6 +47,33 @@ export default function DiceRoller() {
   const [rolls, setRolls] = useState<{ type: DiceType; value: number }[]>([]);
   const [history, setHistory] = useState<RollHistory[]>([]);
   const [isRolling, setIsRolling] = useState(false);
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedHistory = localStorage.getItem(HISTORY_STORAGE_KEY);
+      if (savedHistory) {
+        const parsed = JSON.parse(savedHistory);
+        // Convert timestamp strings back to Date objects
+        const historyWithDates = parsed.map((entry: any) => ({
+          ...entry,
+          timestamp: new Date(entry.timestamp),
+        }));
+        setHistory(historyWithDates);
+      }
+    } catch (error) {
+      console.error('Failed to load dice history from localStorage:', error);
+    }
+  }, []);
+
+  // Save history to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+    } catch (error) {
+      console.error('Failed to save dice history to localStorage:', error);
+    }
+  }, [history]);
 
   const getActiveDiceType = (): DiceType | null => {
     for (const [type, qty] of Object.entries(quantities)) {
@@ -107,6 +136,14 @@ export default function DiceRoller() {
 
   const clearHistory = () => {
     setHistory([]);
+    setResult(null);
+    setRolls([]);
+    // Clear localStorage
+    try {
+      localStorage.removeItem(HISTORY_STORAGE_KEY);
+    } catch (error) {
+      console.error('Failed to clear dice history from localStorage:', error);
+    }
   };
 
   return (
@@ -118,66 +155,66 @@ export default function DiceRoller() {
             Select Your Dice
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {diceTypes.map((dice) => {
-            const activeDiceType = getActiveDiceType();
-            const isDisabled = activeDiceType !== null && activeDiceType !== dice.type;
+            {diceTypes.map((dice) => {
+              const activeDiceType = getActiveDiceType();
+              const isDisabled = activeDiceType !== null && activeDiceType !== dice.type;
 
-            return (
-            <div
-              key={dice.type}
-              className="relative"
-              onMouseEnter={() => !isDisabled && setSelectedDice(dice.type)}
-              onMouseLeave={() => setSelectedDice(null)}
-              onClick={() => {
-                if (isDisabled) return;
-                if (quantities[dice.type] === 0) {
-                  setQuantities(prev => ({ ...prev, [dice.type]: 1 }));
-                } else {
-                  setQuantities(prev => ({ ...prev, [dice.type]: 0 }));
-                }
-              }}
-            >
-              <div
-                className={`
-                  relative p-6 rounded-lg border-2 transition-all duration-200
-                  flex flex-col items-center justify-center gap-2
+              return (
+                <div
+                  key={dice.type}
+                  className="relative"
+                  onMouseEnter={() => !isDisabled && setSelectedDice(dice.type)}
+                  onMouseLeave={() => setSelectedDice(null)}
+                  onClick={() => {
+                    if (isDisabled) return;
+                    if (quantities[dice.type] === 0) {
+                      setQuantities(prev => ({ ...prev, [dice.type]: 1 }));
+                    } else {
+                      setQuantities(prev => ({ ...prev, [dice.type]: 0 }));
+                    }
+                  }}
+                >
+                  <div
+                    className={`
+                  relative p-3 sm:p-6 rounded-lg border-2 transition-all duration-200
+                  flex flex-col items-center justify-center gap-1 sm:gap-2
                   ${isDisabled
-                    ? 'bg-gray-600/30 dark:bg-gray-800/30 border-gray-500/30 dark:border-gray-700/30 opacity-40 cursor-not-allowed'
-                    : quantities[dice.type] > 0
-                      ? 'bg-gradient-to-br from-green-600 to-green-400 dark:from-cyan-500 dark:to-purple-600 border-green-400 dark:border-cyan-400 shadow-[0_0_20px_rgba(34,197,94,0.5)] dark:shadow-[0_0_20px_rgba(34,211,238,0.5)] cursor-pointer'
-                      : 'bg-purple-800/50 dark:bg-purple-900/50 border-purple-600 dark:border-purple-500 hover:border-green-500 dark:hover:border-cyan-400 hover:bg-purple-700/50 dark:hover:bg-purple-800/50 cursor-pointer'
-                  }
+                        ? 'bg-gray-600/30 dark:bg-gray-800/30 border-gray-500/30 dark:border-gray-700/30 opacity-40 cursor-not-allowed'
+                        : quantities[dice.type] > 0
+                          ? 'bg-gradient-to-br from-green-600 to-green-400 dark:from-cyan-500 dark:to-purple-600 border-green-400 dark:border-cyan-400 shadow-[0_0_20px_rgba(34,197,94,0.5)] dark:shadow-[0_0_20px_rgba(34,211,238,0.5)] cursor-pointer'
+                          : 'bg-purple-800/50 dark:bg-purple-900/50 border-purple-600 dark:border-purple-500 hover:border-green-500 dark:hover:border-cyan-400 hover:bg-purple-700/50 dark:hover:bg-purple-800/50 cursor-pointer'
+                      }
                 `}
-              >
-                {quantities[dice.type] >= 2 && (
-                  <span className="absolute top-2 left-1/2 -translate-x-1/2 bg-purple-900 dark:bg-purple-950 text-green-200 dark:text-cyan-300 font-bold text-lg px-3 py-1 rounded-full border-2 border-green-400 dark:border-cyan-500">
-                    {quantities[dice.type]}
-                  </span>
-                )}
-                <span className="text-5xl">{dice.shape}</span>
-                <span className="text-xl font-bold text-green-100 dark:text-cyan-300">{dice.label}</span>
-              </div>
+                  >
+                    {quantities[dice.type] >= 2 && (
+                      <span className="absolute top-1 sm:top-2 left-1/2 -translate-x-1/2 bg-purple-900 dark:bg-purple-950 text-green-200 dark:text-cyan-300 font-bold text-sm sm:text-lg px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border-2 border-green-400 dark:border-cyan-500">
+                        {quantities[dice.type]}
+                      </span>
+                    )}
+                    <span className="text-3xl sm:text-5xl">{dice.shape}</span>
+                    <span className="text-base sm:text-xl font-bold text-green-100 dark:text-cyan-300">{dice.label}</span>
+                  </div>
 
-              {/* Plus/Minus Controls */}
-              {selectedDice === dice.type && quantities[dice.type] > 0 && !isDisabled && (
-                <div className="absolute top-0 left-0 right-0 flex justify-between p-2 z-10">
-                  <button
-                    onClick={(e) => decrementDice(dice.type, e)}
-                    className="w-8 h-8 rounded-full bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 text-white font-bold text-xl flex items-center justify-center border-2 border-red-400 dark:border-red-500 shadow-lg transition-all duration-200 hover:scale-110 active:scale-95"
-                  >
-                    −
-                  </button>
-                  <button
-                    onClick={(e) => incrementDice(dice.type, e)}
-                    className="w-8 h-8 rounded-full bg-green-600 dark:bg-green-700 hover:bg-green-500 dark:hover:bg-green-600 text-white font-bold text-xl flex items-center justify-center border-2 border-green-400 dark:border-green-500 shadow-lg transition-all duration-200 hover:scale-110 active:scale-95"
-                  >
-                    +
-                  </button>
+                  {/* Plus/Minus Controls */}
+                  {selectedDice === dice.type && quantities[dice.type] > 0 && !isDisabled && (
+                    <div className="absolute top-0 left-0 right-0 flex justify-between p-1 sm:p-2 z-10">
+                      <button
+                        onClick={(e) => decrementDice(dice.type, e)}
+                        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 text-white font-bold text-base sm:text-xl flex items-center justify-center border-2 border-red-400 dark:border-red-500 shadow-lg transition-all duration-200 hover:scale-110 active:scale-95"
+                      >
+                        −
+                      </button>
+                      <button
+                        onClick={(e) => incrementDice(dice.type, e)}
+                        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-green-600 dark:bg-green-700 hover:bg-green-500 dark:hover:bg-green-600 text-white font-bold text-base sm:text-xl flex items-center justify-center border-2 border-green-400 dark:border-green-500 shadow-lg transition-all duration-200 hover:scale-110 active:scale-95"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            );
-          })}
+              );
+            })}
           </div>
 
           {/* Roll Button */}

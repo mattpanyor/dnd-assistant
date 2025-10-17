@@ -11,16 +11,14 @@ export default function ThemeProvider({
 
   useEffect(() => {
     setMounted(true);
-    // Initialize theme on mount
+    // Initialize theme on mount - default to dark unless user explicitly set light
     const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
 
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-      document.documentElement.classList.add("dark");
-    } else {
+    if (savedTheme === "light") {
       document.documentElement.classList.remove("dark");
+    } else {
+      // Default to dark mode
+      document.documentElement.classList.add("dark");
     }
   }, []);
 
