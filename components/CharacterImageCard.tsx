@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface CharacterImageCardProps {
   src: string;
   alt?: string;
@@ -14,6 +12,7 @@ export default function CharacterImageCard({
   return (
     <div className="character-image-card flex flex-col items-center">
       <div className="inline-block rounded-lg shadow-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt={alt}

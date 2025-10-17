@@ -47,7 +47,6 @@ export default function Navbar({ navItems }: NavbarProps) {
         setMobileMenuOpen={setMobileMenuOpen}
         isDark={isDark}
         toggleTheme={toggleTheme}
-        isSticky={false}
         showMobileMenu={!showStickyNav}
       />
 
@@ -59,7 +58,6 @@ export default function Navbar({ navItems }: NavbarProps) {
           setMobileMenuOpen={setMobileMenuOpen}
           isDark={isDark}
           toggleTheme={toggleTheme}
-          isSticky={true}
           showMobileMenu={showStickyNav}
         />
       </div>
@@ -73,7 +71,6 @@ function NavbarContent({
   setMobileMenuOpen,
   isDark,
   toggleTheme,
-  isSticky,
   showMobileMenu
 }: {
   navItems: NavItem[];
@@ -81,7 +78,6 @@ function NavbarContent({
   setMobileMenuOpen: (open: boolean) => void;
   isDark: boolean;
   toggleTheme: () => void;
-  isSticky: boolean;
   showMobileMenu: boolean;
 }) {
   return (

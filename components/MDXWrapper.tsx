@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function MDXWrapper({ children }: { children: React.ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [processed, setProcessed] = useState(false);
 
   useEffect(() => {
     if (!contentRef.current || !wrapperRef.current) return;
@@ -43,7 +42,6 @@ export default function MDXWrapper({ children }: { children: React.ReactNode }) 
 
     // Only process if we have sections to work with
     if (sections.length === 0) {
-      setProcessed(true);
       return;
     }
 
@@ -69,8 +67,6 @@ export default function MDXWrapper({ children }: { children: React.ReactNode }) 
 
       container.appendChild(card);
     });
-
-    setProcessed(true);
   }, [children]);
 
   return (
