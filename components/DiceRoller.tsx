@@ -43,8 +43,6 @@ export default function DiceRoller() {
     d100: 0,
   });
   const [selectedDice, setSelectedDice] = useState<DiceType | null>(null);
-  const [result, setResult] = useState<number | null>(null);
-  const [rolls, setRolls] = useState<{ type: DiceType; value: number }[]>([]);
   const [history, setHistory] = useState<RollHistory[]>([]);
   const [isRolling, setIsRolling] = useState(false);
 
@@ -119,8 +117,6 @@ export default function DiceRoller() {
 
     setTimeout(() => {
       const total = newRolls.reduce((sum, roll) => sum + roll.value, 0);
-      setRolls(newRolls);
-      setResult(total);
       setHistory(prev => [
         {
           id: Date.now(),
@@ -136,8 +132,6 @@ export default function DiceRoller() {
 
   const clearHistory = () => {
     setHistory([]);
-    setResult(null);
-    setRolls([]);
     // Clear localStorage
     try {
       localStorage.removeItem(HISTORY_STORAGE_KEY);
@@ -250,19 +244,19 @@ export default function DiceRoller() {
             )}
           </div>
 
-          {/* Current Result */}
-          {result !== null && (
+          {/* Latest Roll - First item in history */}
+          {history.length > 0 && (
             <div className="bg-gradient-to-br from-purple-900 to-indigo-900 dark:from-purple-950 dark:to-indigo-950 border-4 border-green-600 dark:border-cyan-600 rounded-xl p-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] dark:shadow-[0_0_30px_rgba(34,211,238,0.3)] animate-in fade-in duration-500">
               <h3 className="text-xl font-bold text-green-400 dark:text-cyan-300 text-center mb-3">
                 Latest Roll
               </h3>
               <div className="text-center">
                 <div className="text-5xl font-bold bg-gradient-to-r from-green-600 to-green-400 dark:from-cyan-400 dark:to-purple-400 bg-clip-text text-transparent mb-3">
-                  {result}
+                  {history[0].total}
                 </div>
-                {rolls.length > 0 && (
+                {history[0].rolls.length > 0 && (
                   <div className="flex flex-wrap justify-center gap-2 mt-3">
-                    {rolls.map((roll, index) => (
+                    {history[0].rolls.map((roll, index) => (
                       <span
                         key={index}
                         className="bg-purple-800/50 dark:bg-purple-900/50 border-2 border-green-600 dark:border-cyan-500 rounded-lg px-3 py-2 text-green-200 dark:text-cyan-200 font-bold"

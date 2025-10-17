@@ -16,9 +16,6 @@ export default function CharactersPage() {
             <h1 className="text-5xl md:text-6xl font-serif font-bold text-amber-950 dark:text-amber-200 uppercase italic tracking-wide mb-4 dark:drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]">
               Character Gallery
             </h1>
-            <p className="text-xl text-amber-800 dark:text-purple-300 font-serif italic">
-              Meet the heroes and adventurers
-            </p>
           </div>
 
           {/* Character Grid */}

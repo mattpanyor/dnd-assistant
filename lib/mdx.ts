@@ -11,6 +11,8 @@ export interface CharacterMetadata {
   class: string;
   image: string;
   quote?: string;
+  status?: string;
+  game?: string;
   slug: string;
 }
 
