@@ -51,9 +51,9 @@ export default function DiceRoller() {
     try {
       const savedHistory = localStorage.getItem(HISTORY_STORAGE_KEY);
       if (savedHistory) {
-        const parsed = JSON.parse(savedHistory);
+        const parsed = JSON.parse(savedHistory) as Array<Omit<RollHistory, 'timestamp'> & { timestamp: string }>;
         // Convert timestamp strings back to Date objects
-        const historyWithDates = parsed.map((entry: any) => ({
+        const historyWithDates = parsed.map((entry) => ({
           ...entry,
           timestamp: new Date(entry.timestamp),
         }));
@@ -279,7 +279,7 @@ export default function DiceRoller() {
                 {history.length === 0 ? 'No rolls yet. Select dice and roll to see history!' : 'Roll more dice to build your history!'}
               </div>
             ) : (
-              history.slice(1).map((entry, index) => (
+              history.slice(1).map((entry) => (
                 <div
                   key={entry.id}
                   className="bg-purple-800/30 dark:bg-purple-900/30 border-2 border-purple-600/50 dark:border-purple-500/50 rounded-lg p-4 hover:border-green-500/50 dark:hover:border-cyan-500/50 transition-all duration-200"
