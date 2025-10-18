@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { type NavItem } from "@/data/nav";
+import DALogo from "@/components/DALogo";
 
 interface NavbarProps {
   navItems: NavItem[];
@@ -87,9 +88,7 @@ function NavbarContent({
           {/* Logo/Icon - Left Side */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">D&D</span>
-              </div>
+              <DALogo className="w-10 h-10" />
             </Link>
           </div>
 

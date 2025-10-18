@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import ThemeProvider from "./theme-provider";
 import { getNavItems } from "@/lib/nav";
 
@@ -35,11 +36,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${cinzel.variable} ${cormorant.variable} antialiased`}
+        className={`${cinzel.variable} ${cormorant.variable} antialiased flex flex-col min-h-screen`}
       >
         <ThemeProvider>
           <Navbar navItems={navItems} />
-          {children}
+          <main className="flex-1">{children}</main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
