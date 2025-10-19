@@ -16,8 +16,20 @@ export default function Navbar({ navItems }: NavbarProps) {
   const [showStickyNav, setShowStickyNav] = useState(false);
 
   useEffect(() => {
-    // Check initial theme
-    setIsDark(document.documentElement.classList.contains("dark"));
+    // Check initial theme - with a small delay to ensure ThemeProvider has run
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+
+    // Initial check
+    checkTheme();
+
+    // Watch for theme changes from ThemeProvider
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     // Handle scroll to show/hide sticky navbar
     const handleScroll = () => {
@@ -25,7 +37,11 @@ export default function Navbar({ navItems }: NavbarProps) {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const toggleTheme = () => {
