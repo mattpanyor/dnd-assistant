@@ -43,7 +43,7 @@ export default function PrivacyPolicyPage() {
               The data stored locally on your device is used solely to enhance your experience:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
-              <li><strong>Dice Roll History:</strong> Your dice roll history is saved in your browser's localStorage to allow you to review past rolls during your gaming sessions.</li>
+              <li><strong>Dice Roll History:</strong> Your dice roll history is saved in your browser&apos;s localStorage to allow you to review past rolls during your gaming sessions.</li>
               <li><strong>Theme Preference:</strong> Your light/dark mode preference is saved to maintain your chosen theme across visits.</li>
             </ul>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
@@ -56,13 +56,13 @@ export default function PrivacyPolicyPage() {
               4. Data Storage and Security
             </h2>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              All data is stored locally in your browser using the browser's localStorage API. This data:
+              All data is stored locally in your browser using the browser&apos;s localStorage API. This data:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4 mt-4">
               <li>Remains on your device only</li>
               <li>Is not transmitted over the internet</li>
               <li>Is not accessible to us or any third parties</li>
-              <li>Can be cleared at any time by clearing your browser's local storage or using the "Clear History" button in the dice roller</li>
+              <li>Can be cleared at any time by clearing your browser&apos;s local storage or using the &quot;Clear History&quot; button in the dice roller</li>
             </ul>
           </section>
 
@@ -74,7 +74,7 @@ export default function PrivacyPolicyPage() {
               We use the following third-party services:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4 mt-4">
-              <li><strong>Google Fonts:</strong> We use Google Fonts to load custom typefaces. When you visit our site, Google may collect limited technical information. Please refer to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline">Google's Privacy Policy</a> for more information.</li>
+              <li><strong>Google Fonts:</strong> We use Google Fonts to load custom typefaces. When you visit our site, Google may collect limited technical information. Please refer to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline">Google&apos;s Privacy Policy</a> for more information.</li>
             </ul>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
               We do not use any analytics services, advertising networks, or other tracking technologies.
@@ -89,15 +89,15 @@ export default function PrivacyPolicyPage() {
               You have full control over your data:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4 mt-4">
-              <li><strong>Access:</strong> You can view all locally stored data using your browser's developer tools.</li>
-              <li><strong>Delete:</strong> You can clear your dice roll history using the "Clear History" button in the dice roller, or clear all data by clearing your browser's localStorage.</li>
+              <li><strong>Access:</strong> You can view all locally stored data using your browser&apos;s developer tools.</li>
+              <li><strong>Delete:</strong> You can clear your dice roll history using the &quot;Clear History&quot; button in the dice roller, or clear all data by clearing your browser&apos;s localStorage.</li>
               <li><strong>Opt-Out:</strong> You can disable JavaScript or use private browsing mode to prevent any local storage.</li>
             </ul>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mt-8 mb-4 font-serif">
-              7. Children's Privacy
+              7. Children&apos;s Privacy
             </h2>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
               Our website does not knowingly collect any information from anyone, including children under the age of 13.
@@ -134,9 +134,9 @@ export default function PrivacyPolicyPage() {
                 In short:
               </p>
               <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
-                <li>We don't collect your personal information</li>
+                <li>We don&apos;t collect your personal information</li>
                 <li>All data is stored locally in your browser only</li>
-                <li>We don't use cookies or tracking</li>
+                <li>We don&apos;t use cookies or tracking</li>
                 <li>No data is transmitted to our servers or third parties</li>
                 <li>You have full control to view and delete your local data at any time</li>
               </ul>
