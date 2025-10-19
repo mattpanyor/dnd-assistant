@@ -1,19 +1,26 @@
+/* ========================================
+   TAILWIND CSS & CONFIGURATION
+   ======================================== */
 @import "tailwindcss";
 
+/* Dark mode variant configuration for Tailwind CSS v4 */
 @variant dark (&:where(.dark, .dark *));
 
+/* Theme configuration - defines default fonts and colors */
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
-  --font-sans: var(--font-cormorant);
-  --font-serif: var(--font-cinzel);
+  --font-sans: var(--font-cormorant);  /* Cormorant Garamond - used for body text */
+  --font-serif: var(--font-cinzel);     /* Cinzel - used for headings */
 }
 
+/* Root CSS variables - used throughout the app */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* Dark mode color overrides when user prefers dark color scheme */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -21,28 +28,20 @@
   }
 }
 
+/* Global body styles - applied to entire application */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Character Info Styles */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ========================================
+   CHARACTER PAGE STYLES
+   Used in: app/characters/[slug]/page.tsx
+   ======================================== */
 
-.animate-fadeIn {
-  animation: fadeIn 1s ease-out;
-}
-
+/* Fantasy-themed card with torn parchment edges
+   Used in: Character detail pages for content containers */
 .dnd-card {
   position: relative;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -104,18 +103,10 @@ body {
     inset 0 1px 0 rgba(168, 85, 247, 0.1);
 }
 
-.column-text {
-  text-align: justify;
-  hyphens: auto;
-}
-
-@media (min-width: 768px) {
-  .column-text {
-    column-count: 1;
-  }
-}
-
-/* Background Animations */
+/* ========================================
+   ANIMATED BACKGROUND LAYERS
+   Used in: components/AnimatedBackground.tsx
+   ======================================== */
 @keyframes twinkle {
   0%,
   100% {
@@ -273,7 +264,10 @@ body {
   z-index: 0;
 }
 
-/* MDX Content Styles */
+/* ========================================
+   MDX CONTENT STYLES
+   Used in: Character MDX files (.mdx)
+   ======================================== */
 .mdx-content > * + * {
   margin-top: 1rem;
 }
@@ -300,7 +294,10 @@ body {
   position: relative;
 }
 
-/* Dice Background Animation */
+/* ========================================
+   DICE PAGE ANIMATIONS
+   Used in: components/DiceBackground.tsx
+   ======================================== */
 @keyframes diceFloat {
   0%,
   100% {
@@ -323,11 +320,21 @@ body {
   pointer-events: none;
 }
 
+/* Utility class for radial gradients */
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
 }
 
-/* Modern Fantasy Navigation System - Inspired by Uiverse.io */
+/* ========================================
+   NAVIGATION SYSTEM
+   Used in: components/Navbar.tsx
+   Inspired by: Uiverse.io button designs
+   ======================================== */
+
+/* Main navigation item styles
+   - Hollow rhomboid shape with thick border (inactive state)
+   - Filled gradient background (active state)
+   - Germania One font with uppercase text */
 .nav-item {
   --nav-gradient-0: #d97706;
   --nav-gradient-50: #ca8a04;
@@ -367,7 +374,8 @@ body {
   background-color: rgba(141, 73, 253, 0.1);
 }
 
-/* Active state - filled */
+/* Active navigation item - filled gradient background
+   Applied when: Current page matches nav item route */
 .nav-item.active {
   color: #fff;
   text-shadow: 0px 0.5px 0.5px rgba(0, 0, 0, 0.2);
@@ -437,6 +445,7 @@ body {
   transform: translateX(-50%) scale(1.25);
 }
 
+/* Dropdown menu container - appears on hover over nav items with sub-items */
 .nav-dropdown {
   position: absolute;
   left: 0;
@@ -455,6 +464,7 @@ body {
   border-color: rgb(147 51 234);
 }
 
+/* Individual items within dropdown menus */
 .nav-dropdown-item {
   display: block;
   padding: 0.75rem 1.25rem;
@@ -480,6 +490,7 @@ body {
   border-left-color: rgb(192 132 252);
 }
 
+/* Theme toggle button (light/dark mode switcher) */
 .theme-toggle {
   padding: 0.5rem;
   background-color: transparent;
