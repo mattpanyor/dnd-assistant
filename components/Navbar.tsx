@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { type NavItem } from "@/data/nav";
 import DALogo from "@/components/DALogo";
 
@@ -93,7 +94,7 @@ function NavbarContent({
           </div>
 
           {/* Desktop Navigation - Right Side */}
-          <div className="hidden md:flex md:items-center md:space-x-1">
+          <div className="hidden md:flex md:items-center md:space-x-4">
             {navItems.map((item) => (
               <NavItemDesktop key={item.label} item={item} />
             ))}
@@ -101,7 +102,7 @@ function NavbarContent({
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="ml-4 p-2 rounded-full bg-amber-100 dark:bg-indigo-900 hover:bg-amber-200 dark:hover:bg-indigo-800 transition-colors"
+              className="theme-toggle ml-6"
               aria-label="Toggle theme"
             >
               {isDark ? (
@@ -123,7 +124,7 @@ function NavbarContent({
             {/* Theme Toggle Button - Mobile */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-amber-100 dark:bg-indigo-900 hover:bg-amber-200 dark:hover:bg-indigo-800 transition-colors"
+              className="theme-toggle"
               aria-label="Toggle theme"
             >
               {isDark ? (
@@ -199,6 +200,9 @@ function NavbarContent({
 
 function NavItemDesktop({ item }: { item: NavItem }) {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = item.href === pathname || item.items?.some(subItem => subItem.href === pathname);
 
   if (item.items) {
     return (
@@ -207,7 +211,7 @@ function NavItemDesktop({ item }: { item: NavItem }) {
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
       >
-        <button className="px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md hover:shadow-lg border border-amber-300 dark:border-purple-600">
+        <button className={`nav-item ${isActive ? 'active' : ''}`}>
           {item.label}
           <svg
             className="inline-block ml-1 w-4 h-4"
@@ -226,13 +230,13 @@ function NavItemDesktop({ item }: { item: NavItem }) {
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute left-0 mt-1 w-56 bg-amber-50 dark:bg-purple-950 border-2 border-amber-300 dark:border-purple-600 rounded-lg shadow-xl">
+          <div className="nav-dropdown">
             <div className="py-1">
               {item.items.map((subItem) => (
                 <Link
                   key={subItem.label}
                   href={subItem.href || "#"}
-                  className="block px-4 py-2 text-amber-900 dark:text-purple-200 hover:bg-amber-200 dark:hover:bg-purple-800 transition-colors font-serif rounded-md mx-1 my-0.5"
+                  className="nav-dropdown-item"
                 >
                   {subItem.label}
                 </Link>
@@ -247,7 +251,7 @@ function NavItemDesktop({ item }: { item: NavItem }) {
   return (
     <Link
       href={item.href || "#"}
-      className="px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md hover:shadow-lg border border-amber-300 dark:border-purple-600"
+      className={`nav-item ${isActive ? 'active' : ''}`}
     >
       {item.label}
     </Link>
@@ -262,13 +266,16 @@ function NavItemMobile({
   onNavigate: () => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = item.href === pathname || item.items?.some(subItem => subItem.href === pathname);
 
   if (item.items) {
     return (
       <div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full text-left px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md border border-amber-300 dark:border-purple-600 flex justify-between items-center"
+          className={`w-full text-left nav-item flex justify-between items-center ${isActive ? 'active' : ''}`}
         >
           {item.label}
           <svg
@@ -295,7 +302,7 @@ function NavItemMobile({
                 key={subItem.label}
                 href={subItem.href || "#"}
                 onClick={onNavigate}
-                className="block px-4 py-2 text-sm bg-amber-50 dark:bg-purple-900 text-amber-900 dark:text-purple-200 hover:bg-amber-200 dark:hover:bg-purple-800 rounded-md transition-colors font-serif border border-amber-200 dark:border-purple-700"
+                className="nav-dropdown-item"
               >
                 {subItem.label}
               </Link>
@@ -310,7 +317,7 @@ function NavItemMobile({
     <Link
       href={item.href || "#"}
       onClick={onNavigate}
-      className="block px-4 py-2 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-purple-900 dark:to-indigo-900 text-amber-900 dark:text-purple-100 hover:from-amber-200 hover:to-amber-300 dark:hover:from-purple-800 dark:hover:to-indigo-800 rounded-lg font-serif font-semibold transition-all shadow-md border border-amber-300 dark:border-purple-600"
+      className={`nav-item block ${isActive ? 'active' : ''}`}
     >
       {item.label}
     </Link>

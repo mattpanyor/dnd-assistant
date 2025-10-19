@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cinzel, Cormorant_Garamond } from "next/font/google";
+import { Cinzel, Cormorant_Garamond, Germania_One } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -21,6 +21,13 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+const germaniaOne = Germania_One({
+  variable: "--font-germania",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "D&D Assistant",
   description: "A digital assistant for Dungeons & Dragons campaigns",
@@ -36,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${cinzel.variable} ${cormorant.variable} antialiased flex flex-col min-h-screen`}
+        className={`${cinzel.variable} ${cormorant.variable} ${germaniaOne.variable} antialiased flex flex-col min-h-screen`}
       >
         <ThemeProvider>
           <Navbar navItems={navItems} />

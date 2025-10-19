@@ -160,11 +160,22 @@ export default function DiceRoller() {
                   onMouseEnter={() => !isDisabled && setSelectedDice(dice.type)}
                   onMouseLeave={() => setSelectedDice(null)}
                   onClick={() => {
-                    if (isDisabled) return;
+                    if (isDisabled) {
+                      // Clicking a disabled (grayed out) dice cancels the current selection
+                      setQuantities({
+                        d4: 0,
+                        d6: 0,
+                        d8: 0,
+                        d10: 0,
+                        d12: 0,
+                        d20: 0,
+                        d100: 0,
+                      });
+                      return;
+                    }
+                    // Only allow selecting/activating dice that are currently at 0
                     if (quantities[dice.type] === 0) {
                       setQuantities(prev => ({ ...prev, [dice.type]: 1 }));
-                    } else {
-                      setQuantities(prev => ({ ...prev, [dice.type]: 0 }));
                     }
                   }}
                 >

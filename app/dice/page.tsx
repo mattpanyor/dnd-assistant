@@ -5,9 +5,9 @@ export default function DicePage() {
   return (
     <>
       <DiceBackground />
-      <main className="flex-1 flex items-center justify-center py-12 min-h-screen">
+      <div className="flex-1 flex items-start justify-center pt-4 pb-12">
         <DiceRoller />
-      </main>
+      </div>
     </>
   );
 }
