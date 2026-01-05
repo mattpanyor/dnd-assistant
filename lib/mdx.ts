@@ -13,6 +13,7 @@ export interface CharacterMetadata {
   quote?: string;
   status?: string;
   game?: string;
+  published?: boolean;
   slug: string;
 }
 
@@ -45,8 +46,10 @@ export function getCharacterBySlug(slug: string): {
 
 export function getAllCharacters(): CharacterMetadata[] {
   const slugs = getCharacterSlugs();
-  return slugs.map((slug) => {
-    const { metadata } = getCharacterBySlug(slug);
-    return metadata;
-  });
+  return slugs
+    .map((slug) => {
+      const { metadata } = getCharacterBySlug(slug);
+      return metadata;
+    })
+    .filter((metadata) => metadata.published !== false);
 }

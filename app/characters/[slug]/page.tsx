@@ -24,6 +24,11 @@ export default async function CharacterPage({
 
   const { metadata, content } = getCharacterBySlug(slug);
 
+  // Block access to unpublished characters
+  if (metadata.published === false) {
+    notFound();
+  }
+
   // Split content into About section and rest
   const sections = content.split(/^#\s/m);
   const aboutContent = sections[0]; // Everything before first #
